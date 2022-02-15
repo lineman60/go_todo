@@ -53,6 +53,8 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
+	case *list:
+		fmt.Print(l)
 
 	default:
 		fmt.Fprintln(os.Stderr, "Invalid option")
