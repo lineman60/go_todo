@@ -12,7 +12,7 @@ const todoFileName = ".todo.json"
 func main() {
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(),
-			"%s tool. Developed from the Pragmatac bookshelf\n", os.Args[0])
+			"%s tool. Developed from \n the Pragmatac bookshelf\n", os.Args[0])
 		fmt.Fprintf(flag.CommandLine.Output(), "Copyright 2022\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage inforamtion:")
 		flag.PrintDefaults()
@@ -31,12 +31,6 @@ func main() {
 	}
 
 	switch {
-	case *list:
-		for _, item := range *l {
-			if !item.Done {
-				fmt.Println(item.Task)
-			}
-		}
 	case *complete > 0:
 		if err := l.Complete(*complete); err != nil {
 			fmt.Fprintln(os.Stderr, err)
