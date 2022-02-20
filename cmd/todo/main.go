@@ -7,9 +7,15 @@ import (
 	"todo"
 )
 
-const todoFileName = ".todo.json"
+//default file name
+var todoFileName = ".todo.json"
 
 func main() {
+
+	if os.Getenv("TODO_FILENAME") != "" {
+		todoFileName = os.Getenv("TODO_FILENAME")
+	}
+
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(),
 			"%s tool. Developed from \n the Pragmatac bookshelf\n", os.Args[0])
