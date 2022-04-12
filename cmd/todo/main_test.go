@@ -2,11 +2,12 @@ package main_test
 
 import (
 	"fmt"
+	"path/filepath"
+	"runtime"
+
 	"io"
 	"os"
 	"os/exec"
-	"path/filepath"
-	"runtime"
 	"testing"
 )
 
@@ -16,22 +17,24 @@ var (
 )
 
 func TestMain(m *testing.M) {
+
 	fmt.Println("Building tool...")
+
 	if runtime.GOOS == "windows" {
 		binName += ".exe"
 	}
+
 	build := exec.Command("go", "build", "-o", binName)
 
 	if err := build.Run(); err != nil {
-		fmt.Fprintf(os.Stderr, "Can not build tool %s: %s", binName, err)
+		fmt.Fprintf(os.Stderr, "Cannot build tool %s: %s", binName, err)
 		os.Exit(1)
 	}
 
-	fmt.Println("Running tests.....")
-
+	fmt.Println("Running tests....")
 	result := m.Run()
 
-	fmt.Println("Cleaning up ...")
+	fmt.Println("Cleaning up...")
 	os.Remove(binName)
 	os.Remove(fileName)
 
@@ -48,7 +51,7 @@ func TestTodoCLI(t *testing.T) {
 
 	cmdPath := filepath.Join(dir, binName)
 
-	t.Run("AddNewTask", func(t *testing.T) {
+	t.Run("AddNewTaskFromArguments", func(t *testing.T) {
 		cmd := exec.Command(cmdPath, "-add", task)
 
 		if err := cmd.Run(); err != nil {
@@ -57,13 +60,12 @@ func TestTodoCLI(t *testing.T) {
 	})
 
 	task2 := "test task number 2"
-	t.Run("AddTaskFromSTDN", func(t *testing.T) {
+	t.Run("AddNewTaskFromSTDIN", func(t *testing.T) {
 		cmd := exec.Command(cmdPath, "-add")
 		cmdStdIn, err := cmd.StdinPipe()
 		if err != nil {
 			t.Fatal(err)
 		}
-
 		io.WriteString(cmdStdIn, task2)
 		cmdStdIn.Close()
 
